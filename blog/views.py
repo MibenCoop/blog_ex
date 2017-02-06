@@ -26,7 +26,7 @@ def show_category(request,category_name_slug):
     except:
         context_dict['category'] = None
         context_dict['pages'] = None
-    return render(request,'blog/categories.html',context_dict)
+    return render(request, 'blog/show_category.html', context_dict)
 
 
 def show_page(request,id):

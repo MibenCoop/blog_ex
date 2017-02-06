@@ -3,7 +3,11 @@
     - Show Note
 {% endblock %}
 {% block body_block %}
-    {{ message  }}:{{ id }}:
-    <h1>New Level</h1>
-            <li>{{ page.author }}:{{ page.title }} - {{ page.date_print }}</li>
+    <h1>{{ page.title }}</h1><br>
+    <strong>Author:</strong> {{ page.author }} <hr>
+    <strong>Date publish:</strong>{{ page.date_print }} <hr>
+    <strong>Content:</strong>
+    <p id="context_text" >{{ page.content  }}<br></p>
+
+
 {% endblock %}

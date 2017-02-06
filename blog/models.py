@@ -24,7 +24,7 @@ class Page(models.Model):
     title = models.CharField(max_length=128)
     author = models.CharField(max_length=128)
     date_print = models.DateField(auto_now_add=True)
-    content = models.CharField(max_length=5000)
+    content = models.CharField(max_length=5000,)
     views = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     favourite = models.BooleanField(default=False)
