@@ -6,7 +6,7 @@
     {% if category %}
         <strong><h1>Category:{{ category.name }}</h1></strong>
         {% for page in pages %}
-            <li>{{ page.title }} - {{ page.author }}</li>
+            <li>{{ page.author }}:{{ page.title }} - {{ page.date_print }}</li>
         {% endfor %}
 
     {% else %}
@@ -18,7 +18,7 @@
     <hr>
     <hr>
     {% if  user.is_authenticated %}
-        <a href="{%  url 'add_page' category.slug%}"><strong>Add Page</strong></a>
+        <a href="{%  url 'add_page' category.slug %}"><strong>Add Page</strong></a>
     {% else %}
         Only register users can add articles.And comment them.
         For registration click <a href="{% url 'registration_register' %}">here</a>

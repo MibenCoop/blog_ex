@@ -28,6 +28,17 @@ def show_category(request,category_name_slug):
         context_dict['pages'] = None
     return render(request,'blog/categories.html',context_dict)
 
+
+def show_page(request,id):
+    try:
+        page = Page.objects.get(id=id)
+    except:
+        return reverse('index')
+    message = "hey"
+    context_dict = {'message':message,'id':id,'page':page}
+    return render(request,'blog/show_page.html',context_dict)
+
+
 def categories_list(request):
     category_list = Category.objects.order_by('name')
     page_list = Page.objects.order_by('-title')
@@ -78,6 +89,7 @@ def user_logout(request):
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
         return reverse('register_profile')
+
 
 
 

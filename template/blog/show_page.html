@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+{% block title_block %}
+    - Show Note
+{% endblock %}
+{% block body_block %}
+    {{ message  }}:{{ id }}:
+    <h1>New Level</h1>
+            <li>{{ page.author }}:{{ page.title }} - {{ page.date_print }}</li>
+{% endblock %}

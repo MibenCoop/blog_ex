@@ -6,6 +6,7 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ('name',)
+        exclude = ('note_number',)
     def __str__(self):
         return self.name
 
@@ -19,6 +20,6 @@ class PageForm(forms.ModelForm):
     content = forms.CharField(widget=forms.Textarea,help_text="The text of the content")
     class Meta:
         model = Page
-        exclude = ('date_print','category',)
+        exclude = ('date_print','category','views','likes','favourite','id')
     def __str__(self):
         return self.title
