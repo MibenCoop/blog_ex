@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'registration', #should be immediately above 'django.contrib.auth'
     'blog',
 ]
 
@@ -119,3 +120,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 STATICFILES_DIRS = [STATIC_DIR]
 STATIC_URL = '/static/'
+
+
+REGISTRATION_OPEN = True
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_AUTO_LOGIN = True
+LOGIN_REDIRECT_URL = '/blog/'
+LOGIN_URL = '/accounts/login/'

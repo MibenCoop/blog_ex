@@ -1,11 +1,9 @@
 {% extends 'blog/base.html' %}
 {% block title_block %}
-    Home
+    - List Categories
 {% endblock %}
 {% block body_block %}
     <div class="blog-post">
-        <h3>Most popular categories(if you wanna see more click  <a href="{% url 'categories_list' %}">here</a>)</h3>
-    <hr>
         {% if categories %}
             {% for category  in categories %}
                 <a href="{% url 'show_category' category.slug  %}"><li><strong>{{ category.name }}</strong></li></a>
@@ -22,8 +20,4 @@
             Something wrong
         {% endif %}
     </div><!-- /.blog-post -->
-  <ul class="pager">
-    <li><a href="#">Previous</a></li>
-    <li><a href="#">Next</a></li>
-  </ul>
 {% endblock %}
