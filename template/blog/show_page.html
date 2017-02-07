@@ -1,13 +1,21 @@
 {% extends 'blog/base.html' %}
+{% load staticfiles %}
 {% block title_block %}
     - Show Note
 {% endblock %}
 {% block body_block %}
-    <h1>{{ page.title }}</h1><br>
+    <h1>{{ page.title }}
+    {% if page.favorite == False %}
+        <img src="{% static 'images/false.png'  %}" alt="false_star" width="20px" height="20px">
+    {% else %}
+        <img src="{% static 'images/true.png'  %}" alt="true_star" width="20px" height="20px">
+    {% endif %} <br></h1>
+
     <strong>Author:</strong> {{ page.author }} <hr>
     <strong>Date publish:</strong>{{ page.date_print }} <hr>
-    <strong>Content:</strong>
-    <p id="context_text" >{{ page.content  }}<br></p>
-
-
+    <strong>Content:</strong><p id="wrap_text" >{{  page.content }}   <br></p>
+     <h1>Test</h1>
+    Views:{{ page.views }} <hr>
+    Favorite:{{ page.favorite }}
+<a href="{% url 'favorite' page.id %}" class="btn-favorite"><span class="glyphicon glyphicon-star"></span></a>
 {% endblock %}

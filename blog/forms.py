@@ -20,6 +20,6 @@ class PageForm(forms.ModelForm):
     content = forms.CharField(widget=forms.Textarea,help_text="The text of the content")
     class Meta:
         model = Page
-        exclude = ('date_print','category','views','likes','favourite','id')
+        exclude = ('date_print','category','views','likes','favorite','id',)
     def __str__(self):
         return self.title

@@ -2,7 +2,8 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from blog.models import Page,Category
 from blog.forms import PageForm,CategoryForm
 # Create your views here.
@@ -13,8 +14,26 @@ from registration.backends.simple.views import RegistrationView
 def index(request):
     category_list = Category.objects.order_by('name')[:5]
     page_list = Page.objects.order_by('-title')[:5]
-    context_dict = {'message':"Vitalii",'categories':category_list,'pages':page_list}
+    context_dict = {'categories':category_list,'pages':page_list}
     return render(request,'blog/index.html',context_dict)
+
+def favorite(request, page_id):
+    page = get_object_or_404(Page, pk=page_id)
+    context_dict = {}
+    try:
+        if page.favorite == True:
+            page.favorite = False
+            page.save()
+            message = page.favorite
+        else:
+            page.favorite = True
+            page.save()
+            message = page.favorite
+        context_dict = {'id':page_id,'page':page,'message':message}
+    except (KeyError,Page.DoesNotExist):
+        return JsonResponse({'success': False})
+    else:
+        return JsonResponse({'success': True})
 
 def show_category(request,category_name_slug):
     context_dict = {}
@@ -36,6 +55,8 @@ def show_page(request,id):
         return reverse('index')
     message = "hey"
     context_dict = {'message':message,'id':id,'page':page}
+    page.views = page.views + 1
+    page.save()
     return render(request,'blog/show_page.html',context_dict)
 
 

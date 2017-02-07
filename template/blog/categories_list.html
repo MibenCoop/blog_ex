@@ -9,10 +9,12 @@
                 <a href="{% url 'show_category' category.slug  %}"><li><strong>{{ category.name }}</strong></li></a><br>
                 {% if pages %}
                         {% for page in pages %}
+
                             {% if page.category == category %}
-                                <a href="{% url 'show_page' page.id %}">
-                                    <strong>Page title:</strong> {{ page.title }} -
-                                        <strong>Author:</strong> {{ page.author }}</a> <br>
+                                       <strong>Page title:</strong> {{ page.title }} -
+                                        <strong>Author:</strong> {{ page.author }}<br>
+                                            <p id="wrap_text" >{{  page.content|wordwrap:254 }}
+                                                (<a href="{% url 'show_page' page.id %}">Read more</a>)</p>
                             {% endif %}
                         {% endfor %} <hr>
                 {% endif %}
