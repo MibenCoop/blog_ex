@@ -34,6 +34,23 @@ def favorite(request, page_id):
         return JsonResponse({'success': False})
     else:
         return JsonResponse({'success': True})
+def watched_page(request, page_id):
+    page = get_object_or_404(Page, pk=page_id)
+    context_dict = {}
+    try:
+        if page.views == True:
+            page.views = False
+            page.save()
+            message = page.views
+        else:
+            page.views = True
+            page.save()
+            message = page.views
+        context_dict = {'id':page_id,'page':page,'message':message}
+    except (KeyError,Page.DoesNotExist):
+        return JsonResponse({'success': False})
+    else:
+        return JsonResponse({'success': True})
 
 def show_category(request,category_name_slug):
     context_dict = {}
@@ -55,7 +72,7 @@ def show_page(request,id):
         return reverse('index')
     message = "hey"
     context_dict = {'message':message,'id':id,'page':page}
-    page.views = page.views + 1
+   # page.views = page.views + 1
     page.save()
     return render(request,'blog/show_page.html',context_dict)
 
@@ -109,7 +126,7 @@ def user_logout(request):
 
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
-        return reverse('register_profile')
+        return reverse('index')
 
 
 
