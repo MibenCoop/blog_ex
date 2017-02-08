@@ -1,14 +1,15 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from blog.models import Page,Category
-from blog.forms import PageForm,CategoryForm
+from blog.models import Page,Category, UserProfile
+from blog.forms import PageForm,CategoryForm, UserProfileForm
 # Create your views here.
 from django.urls import reverse
 from registration.backends.simple.views import RegistrationView
+from django.contrib.auth.models import User
 
 
 def index(request):
@@ -126,12 +127,46 @@ def user_logout(request):
 
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
-        return reverse('index')
+        return reverse('register_profile')
 
 
+@login_required()
+def register_profile(request):
+    form = UserProfileForm()
 
+    if request.method == "POST":
+        form = UserProfileForm(request.POST,request.FILES)
+        if form.is_valid():
+            user_profile = form.save(commit = False)
+            user_profile.user = request.user
+            user_profile.save()
+            return redirect('index')
+        else:
+            print(form.errors)
 
+    context_dict = {'form':form,}
+    return render(request,'blog/profile_registration.html',context_dict)
 
+@login_required()
+def profile(request,username):
+    try:
+        user = User.objects.get(username = username)
+    except User.DoesNotExist:
+        return redirect('index')
+
+    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+    form = UserProfileForm({'picture':userprofile.picture,})
+
+    if request.method == "POST":
+        form = UserProfileForm(request.POST,request.FILES,instance=userprofile)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('profile',user.username)
+        else:
+            print(form.errors)
+    context_dict = {'form':form,}
+
+    return render(request, 'blog/profile.html', {'userprofile': userprofile, 'selecteduser': user, 'form': form})
 
 
 

@@ -1,5 +1,6 @@
 from django import forms
-from blog.models import Page,Category
+from blog.models import Page,Category, UserProfile
+
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=256,help_text="Enter the name of Category")
@@ -23,3 +24,10 @@ class PageForm(forms.ModelForm):
         exclude = ('date_print','category','views','likes','favorite','id',)
     def __str__(self):
         return self.title
+
+
+class UserProfileForm(forms.ModelForm):
+    picture =  forms.ImageField(required=False)
+    class Meta:
+        model = UserProfile
+        exclude = ('user',)

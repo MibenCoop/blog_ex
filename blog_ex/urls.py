@@ -15,12 +15,15 @@ Including another URLconf
 """
 from blog import views
 from blog.views import MyRegistrationView
+from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf.urls.static import static
 
 urlpatterns = [
+    url(r'^$',views.index,name="index"),
     url(r'^admin/', admin.site.urls),
     url(r'^blog/',include('blog.urls')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^accounts/register/$',MyRegistrationView.as_view(),name='registration_register'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
