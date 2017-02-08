@@ -34,6 +34,11 @@ class Page(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True)
     #sex = models.Field
     picture = models.ImageField(upload_to='profile_images',blank=True)
     def __str__(self):

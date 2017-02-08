@@ -5,10 +5,19 @@
 {% endblock %}
 {% block body_block %}
 <h1>{{selecteduser.username}} Profile</h1>
-    <img src="{{MEDIA_URL}}{{userprofile.picture }}"
-        width="300"
-        height="300"
-    alt="{{selecteduser.username}}" /><br/>
+   {% if userprofile.picture %}
+        <img src="{{MEDIA_URL}}{{userprofile.picture }}"  width="300" height="300"
+             alt="{{selecteduser.username}}" title="avatar"/>
+   {% else %}
+            {% if userprofile.gender == "M" %}
+                 <img width="300" height="300" src="{% static 'images/male.jpg' %}"
+    alt="{{selecteduser.username}}" title="avatar"/>
+            {% else %}
+                <img width="300" height="300" src="{% static 'images/female.jpg' %}"
+    alt="{{selecteduser.username}}" title="avatar"/>
+            {% endif %}
+   {% endif %}
+<br/>
     <div>
     {% if selecteduser.username == user.username %}
         <form method="post" action="." enctype="multipart/form-data">

@@ -22,8 +22,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$',views.index,name="index"),
+    url(r'^accounts/register/$',MyRegistrationView.as_view(),name='registration_register'),
     url(r'^admin/', admin.site.urls),
     url(r'^blog/',include('blog.urls')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
-    url(r'^accounts/register/$',MyRegistrationView.as_view(),name='registration_register'),
+    url(r'^register_profile/$',views.register_profile,name='register_profile'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

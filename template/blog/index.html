@@ -16,7 +16,7 @@
 
                                     <strong>Page title:</strong> {{ page.title }} -
                                         <strong>Author:</strong> {{ page.author }}<br>
-                                            <p id="wrap_text" >{{  page.content|wordwrap:254 }}
+                                            <p id="wrap_text" >{{  page.content }}
                                                 (<a href="{% url 'show_page' page.id %}">Read more</a>)</p>
                             {% endif %}
                         {% endfor %} <hr>

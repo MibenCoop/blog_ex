@@ -124,7 +124,7 @@ h6, .h6 {
 }
 
 #wrap_text {
-    width: 200px;
+    width: 600px;
     word-break: break-all;
     white-space: normal;
 }

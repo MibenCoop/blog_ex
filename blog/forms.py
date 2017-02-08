@@ -28,6 +28,11 @@ class PageForm(forms.ModelForm):
 
 class UserProfileForm(forms.ModelForm):
     picture =  forms.ImageField(required=False)
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+    gender = forms.ChoiceField(initial='M',choices=GENDER_CHOICES)
     class Meta:
         model = UserProfile
         exclude = ('user',)
