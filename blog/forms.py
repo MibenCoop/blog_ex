@@ -17,11 +17,11 @@ class CategoryForm(forms.ModelForm):
 
 class PageForm(forms.ModelForm):
     title = forms.CharField(max_length=128,help_text="Enter the Title")
-    author = forms.CharField(max_length=128,help_text="Enter your Name/Anonym")
+    #author = forms.CharField(max_length=128)
     content = forms.CharField(widget=forms.Textarea,help_text="The text of the content")
     class Meta:
         model = Page
-        exclude = ('date_print','category','views','likes','favorite','id',)
+        exclude = ('date_print','author','category','views','likes','favorite','id',)
     def __str__(self):
         return self.title
 

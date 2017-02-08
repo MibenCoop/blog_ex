@@ -119,6 +119,7 @@ def add_page(request, category_name_slug):
         if form.is_valid():
             page = form.save(commit=False)
             page.category = category
+            page.author = request.user
             page.save()
             print(page)
             return show_category(request, category_name_slug)
@@ -170,7 +171,6 @@ def profile(request, username):
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         return redirect('index')
-
     userprofile = UserProfile.objects.get_or_create(user=user)[0]
     form = UserProfileForm({'picture': userprofile.picture,'gender': userprofile.gender})
 
@@ -184,3 +184,8 @@ def profile(request, username):
     context_dict = {'form': form, }
 
     return render(request, 'blog/profile.html', {'userprofile': userprofile, 'selecteduser': user, 'form': form})
+
+def test_cookies(request):
+    message = request.user
+    context_dir = {'message':message,}
+    return render(request,'blog/testcookies.html',context_dir)

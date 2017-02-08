@@ -5,6 +5,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^$', views.index,name='blog'),
     url(r'^add_category/$', views.add_category,name='add_category'),
+    url(r'^test_cookies/$', views.test_cookies,name='test_cookies'),
     url(r'^profile/(?P<username>[\w\-]+)/$',views.profile, name='profile'),
 
     url(r'^categories_list/(?P<id>[1-9]+)/$', views.show_page, name='show_page'),
