@@ -19,4 +19,7 @@
     <strong>Author:</strong> {{ page.author }} <hr>
     <strong>Date publish:</strong>{{ page.date_print }} <hr>
     <strong>Content:</strong><p id="wrap_text" >{{  page.content }}   <br></p>
+    <a href="{% url 'edit_page' page.id %}"><i class="fa fa-pencil-square-o fa-3x" aria-hidden="true"></i></a>
+    <a href="{% url 'delete_page' page.id %}"><i class="fa fa-trash fa-3x"  aria-hidden="true"></i></a>
+
 {% endblock %}

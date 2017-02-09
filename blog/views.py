@@ -189,3 +189,45 @@ def test_cookies(request):
     message = request.user
     context_dir = {'message':message,}
     return render(request,'blog/testcookies.html',context_dir)
+
+def delete_page(request,id):
+    try:
+        page = Page.objects.get(id=id)
+    except:
+        return reverse('index')
+    category_name_slug = page.category
+    page = Page.objects.get(id=id).delete()
+    #page.save(commit = True)
+    context_dict = {'category_name_slug': category_name_slug}
+    # page.views = page.views + 1
+    return render(request, 'blog/index.html', context_dict)
+
+@login_required
+def edit_page(request,id):
+    try:
+        page = get_object_or_404(Page,id=id)
+    except Page.DoesNotExist:
+        return redirect('index')
+    form = PageForm({'title': page.title,'content': page.content})
+
+    if request.method == "POST":
+        form = PageForm(request.POST, request.FILES, instance=page)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('show_page', id)
+        else:
+            print(form.errors)
+    context_dict = {'form': form, }
+    return render(request, 'blog/edit_page.html', {'form': form,'id':id})
+
+
+
+
+
+
+
+
+
+
+
+
