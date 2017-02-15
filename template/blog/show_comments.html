@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %}
+{% block title_block %}
+    Show Comments
+{% endblock %}
+{% block body_block%}
+    {% if page %}
+        {% for comment in comments %}
+            {{ comment.author }} <br>
+            {{ comment.content }} <hr>
+        {% endfor %}
+
+    {% endif %}
+{% endblock %}

@@ -15,11 +15,47 @@
     {% else %}
         <a href="{% url 'watched_page' page.id %}"><img src="{% static 'images/watch.png'  %}" alt="true_star" width="20px" height="20px"></a>
     {% endif %}<br></h1>
-
     <strong>Author:</strong> {{ page.author }} <hr>
     <strong>Date publish:</strong>{{ page.date_print }} <hr>
     <strong>Content:</strong><p id="wrap_text" >{{  page.content }}   <br></p>
-    <a href="{% url 'edit_page' page.id %}"><i class="fa fa-pencil-square-o fa-3x" aria-hidden="true"></i></a>
-    <a href="{% url 'delete_page' page.id %}"><i class="fa fa-trash fa-3x"  aria-hidden="true"></i></a>
+    <br><br><br><br><br>
+    {% if user.is_authenticated %}
+        <h2>Comments</h2>
+        <div>
+            <h1>Add comment</h1>
+            <form method="post" action="." enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" />
+            </form>
+        </div><br><hr><br>
+    {% else %}
+        <a  href="{% url 'registration_register' %}">Register</a>
+        or <a  href="{% url 'auth_login' %}">login</a>
+        to add your  comment <br><hr><br>
+    {% endif %}
+    {% for comment in comments %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <strong >{{ comment.author }}</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <img src="{{MEDIA_URL}}{{comment.avatar}}"  width="80" height="80"
+                          alt="{{comment.avatar}}" title="avatar"/>
+                    </div>
+                    <div  class="col-sm-10">
+                         <strong>{{ comment.date_print }}</strong>
+                         <p id="wrap_text">{{ comment.content }}</p>
+                    </div>
+                </div>
+            </div><br><hr><br>
+    {% endfor %}
+    {% if owner %}
+        <a href="{% url 'edit_page' page.id %}"><i class="fa fa-pencil-square-o fa-3x" aria-hidden="true"></i></a>
+        <a href="{% url 'delete_page' page.id %}"><i class="fa fa-trash fa-3x"  aria-hidden="true"></i></a>
+    {% endif %}
 
 {% endblock %}

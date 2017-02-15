@@ -5,8 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
-from blog.models import Category, Page, UserProfile
-from blog.forms import CategoryForm, PageForm, UserProfileForm
+from blog.models import Category, Page, UserProfile, Comment
+from blog.forms import CategoryForm, PageForm, UserProfileForm, CommentForm
 from datetime import datetime
 
 #from django.template.defaulttags import url
@@ -80,10 +80,34 @@ def show_page(request, id):
         page = Page.objects.get(id=id)
     except:
         return reverse('index')
-    message = "hey"
-    context_dict = {'message': message, 'id': id, 'page': page}
+    try:
+        username = request.user.username
+        userprofile = UserProfile()
+        if (username):
+             userprofile = UserProfile.objects.get_or_create(user=request.user)[0]
+    except:
+        username = None
+        userprofile = None
+
+    owner = False
+    if (page.author == username):
+        owner = True
+    comments = Comment.objects.filter(owner=id).order_by('-date_print')
     # page.views = page.views + 1
     page.save()
+    form = CommentForm()
+    if request.method == "POST":
+        form = CommentForm(request.POST, request.FILES)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author= request.user
+            comment.avatar = userprofile.picture
+            comment.owner = id
+            comment.save()
+            return redirect('index')
+        else:
+            print(form.errors)
+    context_dict = {'comments': comments, 'id': id, 'page': page, 'userprofile': userprofile,'form':form,'owner':owner}
     return render(request, 'blog/show_page.html', context_dict)
 
 
@@ -121,7 +145,7 @@ def add_page(request, category_name_slug):
             page.category = category
             page.author = request.user
             page.save()
-            print(page)
+            #print(page)
             return show_category(request, category_name_slug)
         else:
             print(form.errors)
@@ -219,15 +243,6 @@ def edit_page(request,id):
             print(form.errors)
     context_dict = {'form': form, }
     return render(request, 'blog/edit_page.html', {'form': form,'id':id})
-
-
-
-
-
-
-
-
-
 
 
 
