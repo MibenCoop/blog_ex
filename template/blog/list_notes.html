@@ -1,0 +1,10 @@
+{% extends 'blog/base.html' %}
+{% block title_block %}
+    List Notes
+{% endblock %}
+{% block body_block %}
+    {% for page in pages %}
+                    <strong>Page title:</strong> {{ page.title }} - <strong>Author:</strong> {{ page.author }}
+                        (<a href="{% url 'show_page' page.id %}">Read more</a>)<br>
+    {% endfor %}
+{% endblock %}

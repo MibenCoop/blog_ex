@@ -37,7 +37,7 @@ class UserProfileForm(forms.ModelForm):
 
 class CommentForm(forms.ModelForm):
     #author = forms.CharField(max_length=128)
-    content = forms.CharField(widget=forms.Textarea,help_text="The text of the content")
+    content = forms.CharField(widget=forms.Textarea)
     class Meta:
         model = Comment
         exclude = ('date_print','author','owner','avatar')

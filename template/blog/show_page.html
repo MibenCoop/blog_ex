@@ -4,20 +4,10 @@
     - Show Note
 {% endblock %}
 {% block body_block %}
-    <h1>{{ page.title }}
-    {% if page.favorite == False %}
-        <a href="{% url 'favorite' page.id %}"><img src="{% static 'images/false.png'  %}" alt="false_star" width="20px" height="20px"></a>
-    {% else %}
-        <a href="{% url 'favorite' page.id %}"><img src="{% static 'images/true.png'  %}" alt="true_star" width="20px" height="20px"></a>
-    {% endif %}
-    {% if page.views == False %}
-        <a href="{% url 'watched_page' page.id %}"><img src="{% static 'images/unwatch.png'  %}" alt="false_star" width="20px" height="20px"></a>
-    {% else %}
-        <a href="{% url 'watched_page' page.id %}"><img src="{% static 'images/watch.png'  %}" alt="true_star" width="20px" height="20px"></a>
-    {% endif %}<br></h1>
+    <h1>{{ page.title }}</h1>
     <strong>Author:</strong> {{ page.author }} <hr>
     <strong>Date publish:</strong>{{ page.date_print }} <hr>
-    <strong>Content:</strong><p id="wrap_text" >{{  page.content }}   <br></p>
+    <p id="wrap_text" >{{  page.content }}   <br></p>
     <br><br><br><br><br>
     {% if user.is_authenticated %}
         <h2>Comments</h2>
@@ -46,14 +36,22 @@
                         <img src="{{MEDIA_URL}}{{comment.avatar}}"  width="80" height="80"
                           alt="{{comment.avatar}}" title="avatar"/>
                     </div>
-                    <div  class="col-sm-10">
+                    <div  class="col-sm-6">
                          <strong>{{ comment.date_print }}</strong>
                          <p id="wrap_text">{{ comment.content }}</p>
+                    </div>
+                    <div  class="col-sm-4">
+                        {% if owner %}
+                             <a href="{% url 'delete_comment' comment.id %}"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+                        {% elif comment.author == user.username %}
+                            <a href="{% url 'edit_comment' comment.id %}"><i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i></a>
+                            <a href="{% url 'delete_comment' comment.id %}"><i class="fa fa-trash fa-2x" aria-hidden="true"></i></a>
+                        {% endif %}
                     </div>
                 </div>
             </div><br><hr><br>
     {% endfor %}
-    {% if owner %}
+    {% if page.author == user.username %}
         <a href="{% url 'edit_page' page.id %}"><i class="fa fa-pencil-square-o fa-3x" aria-hidden="true"></i></a>
         <a href="{% url 'delete_page' page.id %}"><i class="fa fa-trash fa-3x"  aria-hidden="true"></i></a>
     {% endif %}

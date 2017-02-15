@@ -51,4 +51,4 @@ class Comment(models.Model):
     date_print = models.DateTimeField(auto_now_add=True)
     content = models.CharField(max_length=5000,)
     def __str__(self):
-        return self.owner
+        return self.author

@@ -30,10 +30,12 @@
         {% if user.is_authenticated %}
             <a class="blog-nav-item" href="{% url 'categories_list' %}">Categories</a>
         {% else %}
-            <a class="blog-nav-item" href="#">Think</a>
         {% endif %}
       <a class="blog-nav-item" href="{% url 'test_cookies' %}">test_cookies</a>
-      <a class="blog-nav-item" href="#">New hires</a>
+        {% if user.is_authenticated %}
+                 <a class="blog-nav-item" href="{% url 'list_notes' %}">List of notes</a>
+        {% else %}
+        {% endif %}
       <a class="blog-nav-item" href="#">About</a>
     </nav>
     <nav class="blog-nav col-sm-3">

@@ -76,10 +76,12 @@ def show_category(request, category_name_slug):
 
 
 def show_page(request, id):
+    #Получить страницу
     try:
         page = Page.objects.get(id=id)
     except:
         return reverse('index')
+    # Получить юзера
     try:
         username = request.user.username
         userprofile = UserProfile()
@@ -89,13 +91,12 @@ def show_page(request, id):
         username = None
         userprofile = None
 
-    owner = False
-    if (page.author == username):
-        owner = True
+    # Список комментов, отсртированных по дате с конца
     comments = Comment.objects.filter(owner=id).order_by('-date_print')
-    # page.views = page.views + 1
     page.save()
     form = CommentForm()
+
+    # Заполнение формы
     if request.method == "POST":
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -104,10 +105,11 @@ def show_page(request, id):
             comment.avatar = userprofile.picture
             comment.owner = id
             comment.save()
-            return redirect('index')
         else:
             print(form.errors)
-    context_dict = {'comments': comments, 'id': id, 'page': page, 'userprofile': userprofile,'form':form,'owner':owner}
+
+
+    context_dict = {'comments': comments, 'id': id, 'page': page, 'userprofile': userprofile,'form':form}
     return render(request, 'blog/show_page.html', context_dict)
 
 
@@ -243,6 +245,47 @@ def edit_page(request,id):
             print(form.errors)
     context_dict = {'form': form, }
     return render(request, 'blog/edit_page.html', {'form': form,'id':id})
+
+
+
+@login_required
+def list_notes(request):
+    username = request.user.username
+    pages = Page.objects.filter(author=username).order_by('-date_print')
+    context_dict = {'pages':pages,}
+    return render(request, 'blog/list_notes.html', context_dict)
+
+
+def delete_comment(request,id):
+    try:
+        comment = Comment.objects.get(id=id)
+    except:
+        return reverse('index')
+    comment_owner = comment.owner
+    comment = Comment.objects.get(id=id).delete()
+    return redirect('show_page', comment_owner)
+
+
+@login_required
+def edit_comment(request,id):
+    try:
+        comment = get_object_or_404(Comment,id=id)
+        page_id = comment.owner
+    except Comment.DoesNotExist:
+        return redirect('index')
+    form = CommentForm({'content': comment.content})
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('show_page', page_id)
+        else:
+            print(form.errors)
+    context_dict = {'form': form, }
+    return render(request, 'blog/edit_comment.html', {'form': form,'id':id})
+
+
+
 
 
 
