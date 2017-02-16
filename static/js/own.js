@@ -1,6 +1,4 @@
 
-
-
 /*
 $('#like').click(function(){
       $.ajax({

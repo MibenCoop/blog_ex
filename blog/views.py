@@ -94,17 +94,17 @@ def show_page(request, id):
         username = None
         userprofile = None
     #Лайк
-    like = False
-    try:
-        user = request.user
+    like = False;dislike = False
+    user = request.user
+    if user:
         page = get_object_or_404(Page, id=id)
         if page.likes.filter(id=user.id).exists():
-            page.likes.remove(user)
-            like = True
+            like = True; dislike = False
+        elif page.dislikes.filter(id=user.id).exists():
+            dislike = True;like = False
         else:
-            page.likes.add(user)
-            like = False
-    except:
+            like = False; dislike = False
+    else:
         user = None
     # Список комментов, отсртированных по дате с конца
     comments = Comment.objects.filter(owner=id).order_by('-date_print')
@@ -126,7 +126,7 @@ def show_page(request, id):
 
 
     context_dict = {'comments': comments, 'id': id, 'page': page,
-                    'userprofile': userprofile,'form':form,'like':like}
+                    'userprofile': userprofile,'form':form,'like':like,'dislike':dislike}
     return render(request, 'blog/show_page.html', context_dict)
 
 
@@ -316,26 +316,29 @@ def track_url(request,id):
 
 
 @login_required
-def like(request,id):
+def like(request,id,):
     user = request.user
-    message = user.id
     page = get_object_or_404(Page, id=id)
-    message = True
     if page.likes.filter(id=user.id).exists():
-        # user has already liked this company
-        # remove like/user
         page.likes.remove(user)
-        message = True
+
     else:
-        # add a new like for a company
         page.likes.add(user)
-        message = True
-    #    return  HttpResponse("not good")
-    context_dict = {'message': message}
-    # use mimetype instead of content_type if django < 5
-    #return HttpResponse("fdssfdsdf {0}".format(message))
-    #return render(request, 'blog/index.html', {'message':message})
+        page.dislikes.remove(user)
     return redirect('show_page', id)
+
+
+@login_required
+def dislike(request,id,):
+    user = request.user
+    page = get_object_or_404(Page, id=id)
+    if page.dislikes.filter(id=user.id).exists():
+        page.dislikes.remove(user)
+    else:
+        page.dislikes.add(user)
+        page.likes.remove(user)
+    return redirect('show_page', id)
+
 
 
 

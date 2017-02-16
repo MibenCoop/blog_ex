@@ -17,10 +17,7 @@
                                             <p id="wrap_text" >{{  page.content }}
                                                 (<a href="{% url 'goto' page.id %}">Read more</a>)</p>
                                 <a href="{% url 'like' page.id %}">Like</a>
-
-
-                                <br>
-
+                                <a href="{% url 'dislike' page.id %}">Dislike</a><br><br>
                             {% endif %}
                         {% endfor %} <hr>
                 {% endif %}

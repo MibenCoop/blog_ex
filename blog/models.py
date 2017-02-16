@@ -27,7 +27,8 @@ class Page(models.Model):
     date_print = models.DateTimeField(auto_now_add=True)
     content = models.CharField(max_length=5000,)
     views = models.IntegerField(default=0)
-    likes = models.ManyToManyField(User, related_name='likes')
+    likes = models.ManyToManyField(User, related_name='likes',default=0)
+    dislikes = models.ManyToManyField(User, related_name='dislikes',default=0)
     favorite = models.BooleanField(default=False)
 
     @property
@@ -59,5 +60,6 @@ class Comment(models.Model):
     author = models.CharField(max_length=128)
     date_print = models.DateTimeField(auto_now_add=True)
     content = models.CharField(max_length=5000,)
+
     def __str__(self):
         return self.author
