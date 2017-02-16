@@ -27,10 +27,19 @@ class Page(models.Model):
     date_print = models.DateTimeField(auto_now_add=True)
     content = models.CharField(max_length=5000,)
     views = models.IntegerField(default=0)
-    likes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, related_name='likes')
     favorite = models.BooleanField(default=False)
+
+    @property
+    def total_likes(self):
+        """
+        Likes for the company
+        :return: Integer: Likes for the company
+        """
+        return self.likes.count()
+
     def __str__(self):
-        return self.id
+        return self.title
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)

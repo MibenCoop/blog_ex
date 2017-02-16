@@ -14,7 +14,8 @@
                                        <strong>Page title:</strong> {{ page.title }} -
                                         <strong>Author:</strong> {{ page.author }}<br>
                                             <p id="wrap_text" >{{  page.content|wordwrap:254 }}
-                                                (<a href="{% url 'show_page' page.id %}">Read more</a>)</p>
+                                                (<a href="{% url 'show_page' page.id %}">Read more</a>)</p><br>
+                                                    Like:{{ message }}
                             {% endif %}
                         {% endfor %} <hr>
                 {% endif %}

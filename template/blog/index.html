@@ -3,7 +3,6 @@
     Home
 {% endblock %}
 {% block body_block %}
-    <h1>{{ message }} {{title }} {{ lie }}</h1>
     <div class="blog-post">
         <h3>Most popular categories(if you wanna see more click  <a href="{% url 'categories_list' %}">here</a>)</h3>
     <hr>
@@ -13,16 +12,20 @@
                 {% if pages %}
                         {% for page in pages %}
                             {% if page.category == category %}
-
                                     <strong>Page title:</strong> {{ page.title }} -
                                         <strong>Author:</strong> {{ page.author }}<br>
                                             <p id="wrap_text" >{{  page.content }}
-                                                (<a href="{% url 'show_page' page.id %}">Read more</a>)</p>
+                                                (<a href="{% url 'goto' page.id %}">Read more</a>)</p>
+                                <a href="{% url 'like' page.id %}">Like</a>
+
+
+                                <br>
+
                             {% endif %}
                         {% endfor %} <hr>
                 {% endif %}
                 </ul>
-            {% endfor %}
+            {% endfor %}s
         {% else %}
             Something wrong
         {% endif %}

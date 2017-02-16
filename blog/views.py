@@ -1,10 +1,13 @@
 from django.conf.urls import url
+from django.core.serializers import json
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
+from django.views.decorators.http import require_POST
+
 from blog.models import Category, Page, UserProfile, Comment
 from blog.forms import CategoryForm, PageForm, UserProfileForm, CommentForm
 from datetime import datetime
@@ -90,7 +93,19 @@ def show_page(request, id):
     except:
         username = None
         userprofile = None
-
+    #Лайк
+    like = False
+    try:
+        user = request.user
+        page = get_object_or_404(Page, id=id)
+        if page.likes.filter(id=user.id).exists():
+            page.likes.remove(user)
+            like = True
+        else:
+            page.likes.add(user)
+            like = False
+    except:
+        user = None
     # Список комментов, отсртированных по дате с конца
     comments = Comment.objects.filter(owner=id).order_by('-date_print')
     page.save()
@@ -105,18 +120,21 @@ def show_page(request, id):
             comment.avatar = userprofile.picture
             comment.owner = id
             comment.save()
+            return HttpResponseRedirect(request.path)
         else:
             print(form.errors)
 
 
-    context_dict = {'comments': comments, 'id': id, 'page': page, 'userprofile': userprofile,'form':form}
+    context_dict = {'comments': comments, 'id': id, 'page': page,
+                    'userprofile': userprofile,'form':form,'like':like}
     return render(request, 'blog/show_page.html', context_dict)
 
 
 def categories_list(request):
     category_list = Category.objects.order_by('name')
     page_list = Page.objects.order_by('-title')
-    context_dict = {'message': "Vitalii", 'categories': category_list, 'pages': page_list}
+    user = request.user
+    context_dict = {'message': "lol", 'categories': category_list, 'pages': page_list}
     return render(request, 'blog/categories_list.html', context_dict)
 
 
@@ -283,6 +301,47 @@ def edit_comment(request,id):
             print(form.errors)
     context_dict = {'form': form, }
     return render(request, 'blog/edit_comment.html', {'form': form,'id':id})
+
+
+
+
+def track_url(request,id):
+    try:
+        page = Page.objects.get(id=id)
+        page.views = page.views + 1
+        page.save()
+        return redirect('show_page', id)
+    except:
+        return HttpResponse("Page id {0} not found".format(id))
+
+
+@login_required
+def like(request,id):
+    user = request.user
+    message = user.id
+    page = get_object_or_404(Page, id=id)
+    message = True
+    if page.likes.filter(id=user.id).exists():
+        # user has already liked this company
+        # remove like/user
+        page.likes.remove(user)
+        message = True
+    else:
+        # add a new like for a company
+        page.likes.add(user)
+        message = True
+    #    return  HttpResponse("not good")
+    context_dict = {'message': message}
+    # use mimetype instead of content_type if django < 5
+    #return HttpResponse("fdssfdsdf {0}".format(message))
+    #return render(request, 'blog/index.html', {'message':message})
+    return redirect('show_page', id)
+
+
+
+
+
+
 
 
 

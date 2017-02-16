@@ -4,7 +4,7 @@
 {% endblock %}
 {% block body_block %}
     <div>
-        <h1>Add Category: {{ category.name }}</h1>
+        <h1>{{ message }}Add Category: {{ category.name }}</h1>
         <form role="form" id="page_form" method="post" action="/blog/edit_page/{{id}}/">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}

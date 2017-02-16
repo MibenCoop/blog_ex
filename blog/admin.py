@@ -13,6 +13,9 @@ class PageAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('author',  'date_print','id')
 
+#
+
 admin.site.register(Page, PageAdmin)
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Comment,CommentAdmin)
+#admin.site.register(Like,LikeAdmin)
