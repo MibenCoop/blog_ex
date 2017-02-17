@@ -1,7 +1,7 @@
 {% extends 'blog/base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-    - Show Note
+    - {{ page.title }}
 {% endblock %}
 {% block body_block %}
     <h1>{{ page.title }}
@@ -38,7 +38,7 @@
             {% for field in form.visible_fields %}
                 {{ field.errors }}
                 {{ field.help_text }}<br>
-                {{ field }}
+                {{ field }}<br>
             {% endfor %}
             <input type="submit" value="Submit" />
             </form>

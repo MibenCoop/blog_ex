@@ -1,8 +1,13 @@
+import os
+
 from django.db import models
 
 # Create your models here.
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+
+from blog_ex import settings
+from blog_ex.settings import STATIC_DIR
 
 
 class Category(models.Model):
@@ -50,10 +55,8 @@ class UserProfile(models.Model):
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True)
     #sex = models.Field
-    picture = models.ImageField(upload_to='profile_images',blank=True)
-    def __str__(self):
-        return self.user.username
-
+    picture = models.ImageField(upload_to='profile_images',
+                                blank=True,default = 'avatar.jpg',)
 class Comment(models.Model):
     owner = models.IntegerField(default=0)
     avatar = models.ImageField(blank=True)

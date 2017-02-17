@@ -10,11 +10,11 @@
                 {{ hidden }}
             {% endfor %}
             {% for field in form.visible_fields %}
-                {{ field.errors }}
+                {{ field.errors.as_text  }}
                 {{ field.help_text }}<br>
                 {{ field }} <hr>
             {% endfor %}
-            <button class="btn btn-primary" name="submit" value="submit">Create page</button>
+            <button class="btn btn-primary" name="submit" value="submit">Edit comment</button>
 
         </form>
     </div>

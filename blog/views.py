@@ -20,6 +20,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout
 
 
+
 def index(request):
     category_list = Category.objects.order_by('name')[:5]
     page_list = Page.objects.order_by('-title')[:5]
@@ -194,6 +195,7 @@ def register_profile(request):
         if form.is_valid():
             user_profile = form.save(commit=False)
             user_profile.user = request.user
+
             user_profile.save()
             return redirect('index')
         else:
@@ -240,6 +242,7 @@ def delete_page(request,id):
     except:
         return reverse('index')
     category_name_slug = page.category
+    comments = Comment.objects.filter(owner = id).delete()
     page = Page.objects.get(id=id).delete()
     #page.save(commit = True)
     context_dict = {'category_name_slug': category_name_slug}
@@ -262,7 +265,7 @@ def edit_page(request,id):
         else:
             print(form.errors)
     context_dict = {'form': form, }
-    return render(request, 'blog/edit_page.html', {'form': form,'id':id})
+    return render(request, 'blog/show_page.html', {'form': form,'id':id})
 
 
 

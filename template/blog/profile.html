@@ -1,28 +1,27 @@
 {% extends 'blog/base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-    {{ selecteduser.username }} Profile
+    {{ selecteduser.username }}
 {% endblock %}
 {% block body_block %}
 <h1>{{selecteduser.username}} Profile</h1>
    {% if userprofile.picture %}
-        <img src="{{MEDIA_URL}}{{userprofile.picture }}"  width="300" height="300"
+        <img src="{{MEDIA_URL}}{{userprofile.picture }}"  width="200" height="200"
              alt="{{selecteduser.username}}" title="avatar"/>
    {% else %}
             {% if userprofile.gender == "M" %}
-                 <img width="300" height="300" src="{% static 'images/male.jpg' %}"
+                 <img width="200" height="200" src="{% static 'images/male.jpg' %}"
     alt="{{selecteduser.username}}" title="avatar"/>
             {% else %}
-                <img width="300" height="300" src="{% static 'images/female.jpg' %}"
+                <img width="200" height="200" src="{% static 'images/female.jpg' %}"
     alt="{{selecteduser.username}}" title="avatar"/>
             {% endif %}
-   {% endif %}
-<br/>
+   {% endif %}<br>
     <div>
-    {% if selecteduser.username == user.username %}
+    {% if selecteduser.username == user.username %}<br><br>
         <form method="post" action="." enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.as_p }}<br><br>
          <input type="submit" value="Update" />
         </form>
     {% else %}
