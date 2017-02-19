@@ -80,12 +80,10 @@ def show_category(request, category_name_slug):
 
 
 def show_page(request, id):
-    #Получить страницу
     try:
         page = Page.objects.get(id=id)
     except:
         return reverse('index')
-    # Получить юзера
     try:
         username = request.user.username
         userprofile = UserProfile()
@@ -94,7 +92,6 @@ def show_page(request, id):
     except:
         username = None
         userprofile = None
-    #Лайк
     like = False;dislike = False
     user = request.user
     if user:
@@ -107,12 +104,10 @@ def show_page(request, id):
             like = False; dislike = False
     else:
         user = None
-    # Список комментов, отсртированных по дате с конца
     comments = Comment.objects.filter(owner=id).order_by('-date_print')
     page.save()
     form = CommentForm()
 
-    # Заполнение формы
     if request.method == "POST":
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -137,6 +132,10 @@ def categories_list(request):
     user = request.user
     context_dict = {'message': "lol", 'categories': category_list, 'pages': page_list}
     return render(request, 'blog/categories_list.html', context_dict)
+
+def about(request):
+   return render(request,'blog/about.html')
+
 
 
 def add_category(request):

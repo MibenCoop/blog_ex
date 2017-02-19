@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^add_category/$', views.add_category,name='add_category'),
     url(r'^test_cookies/$', views.test_cookies,name='test_cookies'),
     url(r'^list_notes/$', views.list_notes,name='list_notes'),
+    url(r'^about/$', views.about,name='about'),
     url(r'goto/(?P<id>[0-9]+)/$', views.track_url, name='goto'),
     url(r'^delete_page/(?P<id>[0-9]+)/$', views.delete_page,name='delete_page'),
     url(r'^delete_comment/(?P<id>[0-9]+)/$', views.delete_comment,name='delete_comment'),

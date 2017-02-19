@@ -4,7 +4,7 @@
 {% endblock %}
 {% block body_block %}
     <div class="blog-post">
-        <h3>Most popular categories(if you wanna see more click  <a href="{% url 'categories_list' %}">here</a>)</h3>
+        <h3>Наиболее популярные категории(если хотите увидеть все кликните  <a href="{% url 'categories_list' %}">сюда</a>)</h3>
     <hr>
         {% if categories %}
             {% for category  in categories %}
@@ -12,21 +12,21 @@
                 {% if pages %}
                         {% for page in pages %}
                             {% if page.category == category %}
-                                    <strong>Page title:</strong> {{ page.title }} -
-                                        <strong>Author:</strong> {{ page.author }}<br>
+                                    <strong>Название:</strong> {{ page.title }} -
+                                        <strong>Автор:</strong> {{ page.author }}<br>
                                             <p id="wrap_text" >{{  page.content }}
-                                                (<a href="{% url 'goto' page.id %}">Read more</a>)</p>
+                                                (<a href="{% url 'goto' page.id %}">Читать далее</a>)</p>
                             {% endif %}
                         {% endfor %} <hr>
                 {% endif %}
                 </ul>
             {% endfor %}
         {% else %}
-            Something wrong
+            Что-то не так
         {% endif %}
     </div><!-- /.blog-post -->
   <ul class="pager">
-    <li><a href="#">Previous</a></li>
-    <li><a href="#">Next</a></li>
+    <li><a href="#">Предыдущая</a></li>
+    <li><a href="#">Следующая</a></li>
   </ul>
 {% endblock %}

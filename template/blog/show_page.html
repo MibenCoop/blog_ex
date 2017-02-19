@@ -22,14 +22,14 @@
         {% endif %}
     {% endif %}
     </h1>
-    <strong>Author:</strong> {{ page.author }} <hr>
-    <strong>Date publish:</strong>{{ page.date_print }} <hr>
+    <strong>Автор:</strong> {{ page.author }} <hr>
+    <strong>Дата публицации:</strong>{{ page.date_print }} <hr>
     <p id="wrap_text" >{{  page.content }}   <br></p>
     <br><br><br><br><br>
     {% if user.is_authenticated %}
-        <h2>Comments</h2>
+        <h2>Комментарии</h2>
         <div>
-            <h1>Add comment</h1>
+            <h1>Добавить комментарий</h1>
             <form method="post" action="." enctype="multipart/form-data">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
@@ -44,9 +44,9 @@
             </form>
         </div><br><hr><br>
     {% else %}
-        <a  href="{% url 'registration_register' %}">Register</a>
-        or <a  href="{% url 'auth_login' %}">login</a>
-        to add your  comment <br><hr><br>
+        <a  href="{% url 'registration_register' %}">Зарегистрировться</a>
+        или <a  href="{% url 'auth_login' %}">Войти</a>
+    для добавление комментари <br><hr><br>
     {% endif %}
     {% for comment in comments %}
             <div class="container">

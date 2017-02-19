@@ -11,7 +11,7 @@ from blog_ex.settings import STATIC_DIR
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=256,unique=True)
+    name = models.CharField(max_length=254,unique=True)
     slug = models.SlugField(unique=True)
     note_number = models.IntegerField(default=0)
 

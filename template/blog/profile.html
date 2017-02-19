@@ -4,7 +4,7 @@
     {{ selecteduser.username }}
 {% endblock %}
 {% block body_block %}
-<h1>{{selecteduser.username}} Profile</h1>
+<h1>{{selecteduser.username}}</h1>
    {% if userprofile.picture %}
         <img src="{{MEDIA_URL}}{{userprofile.picture }}"  width="200" height="200"
              alt="{{selecteduser.username}}" title="avatar"/>

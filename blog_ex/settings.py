@@ -15,7 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR,'template')
-STATIC_DIR = os.path.join(BASE_DIR,'static')
+STATIC_ROOT =  '/home/MindKiller/blog_ex/static'
+STATIC_DIR =  os.path.join(BASE_DIR,'static')
 MEDIA_DIR = os.path.join(BASE_DIR,'media')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -26,7 +27,7 @@ SECRET_KEY = '$zud@t((!v9fwbs9-$d2kv_$m(p#vqvlmsk#%zkl9m5^pzu^*v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['MindKiller.pythonanywhere.com']
 
 
 # Application definition
@@ -85,7 +86,6 @@ DATABASES = {
     }
 }
 
-
 # Password hashing functions
 # https://docs.djangoproject.com/en/1.9/topics/auth/passwords/#how-django-stores-passwords
 PASSWORD_HASHERS = [
@@ -130,9 +130,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-STATICFILES_DIRS = [STATIC_DIR]
+STATICFILES_DIRS = STATIC_DIR
 STATIC_URL = '/static/'
-
 
 REGISTRATION_OPEN = True
 ACCOUNT_ACTIVATION_DAYS = 7

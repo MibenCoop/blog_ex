@@ -1,9 +1,9 @@
 {% extends "blog/base.html" %}
 {% block title_block %}
-Add comment
+Добавить комментарий
 {% endblock %}
 {% block body_block %}
-<h1>Add comment</h1>
+<h1>Добавить комментарий</h1>
 <form method="post" action="." enctype="multipart/form-data">
 {% csrf_token %}
 {{ form.as_p }}
