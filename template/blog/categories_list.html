@@ -1,6 +1,6 @@
 {% extends 'blog/base.html' %}
 {% block title_block %}
-    - List Categories
+    - Список категорий
 {% endblock %}
 {% block body_block %}
     <div class="blog-post">
@@ -11,17 +11,17 @@
                         {% for page in pages %}
 
                             {% if page.category == category %}
-                                       <strong>Page title:</strong> {{ page.title }} -
-                                        <strong>Author:</strong> {{ page.author }}<br>
+                                       <strong>Название статьи:</strong> {{ page.title }} -
+                                        <strong>Автор:</strong> {{ page.author }}<br>
                                             <p id="wrap_text" >{{  page.content|wordwrap:254 }}
-                                                (<a href="{% url 'show_page' page.id %}">Read more</a>)</p><br>
+                                                (<a href="{% url 'show_page' page.id %}">Читать далее</a>)</p><br>
                             {% endif %}
                         {% endfor %} <hr>
                 {% endif %}
                 </ul>
             {% endfor %}
         {% else %}
-            Something wrong
+            Что-то не так
         {% endif %}
     </div><!-- /.blog-post -->
 {% endblock %}

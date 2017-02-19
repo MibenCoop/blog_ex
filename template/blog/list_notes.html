@@ -1,10 +1,10 @@
 {% extends 'blog/base.html' %}
 {% block title_block %}
-    List Notes
+    Мои заметки
 {% endblock %}
 {% block body_block %}
     {% for page in pages %}
-                    <strong>Page title:</strong> {{ page.title }} - <strong>Author:</strong> {{ page.author }}
-                        (<a href="{% url 'show_page' page.id %}">Read more</a>)<br>
+                    <strong>Название:</strong> {{ page.title }} - <strong>Автор:</strong> {{ page.author }}
+                        (<a href="{% url 'show_page' page.id %}">Читать далее</a>)<br>
     {% endfor %}
 {% endblock %}
