@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'registration', #should be immediately above 'django.contrib.auth'
+
+    'social.apps.django_app.default',  # <--
+
+    #'registration', #should be immediately above 'django.contrib.auth'
     'blog',
 ]
 
@@ -52,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    #'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',  # <--
 ]
 
 ROOT_URLCONF = 'blog_ex.urls'
@@ -68,6 +73,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social.apps.django_app.context_processors.backends',  # <--
+                'social.apps.django_app.context_processors.login_redirect', # <--
             ],
         },
     },
@@ -133,12 +141,13 @@ USE_TZ = True
 STATICFILES_DIRS = [STATIC_DIR]
 STATIC_URL = '/static/'
 
+"""
 REGISTRATION_OPEN = True
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_AUTO_LOGIN = True
 LOGIN_REDIRECT_URL = '/blog/'
 LOGIN_URL = '/accounts/login/'
-
+"""
 #Media files(user images)
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
@@ -146,8 +155,27 @@ MEDIA_URL = '/media/'
 
 
 
+AUTHENTICATION_BACKENDS = (
+    'social.backends.github.GithubOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.facebook.FacebookOAuth2',
+    #'social.backends.vk.VKOAuth2'
+
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'blog'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_TWITTER_KEY = 'ui81nnwdwrcURYVf4vNhLSBU4'
+SOCIAL_AUTH_TWITTER_SECRET = 'AesWOmIckJEjDBywswUe4bv8v0zyfOluqp2Ory2TNkjmzUGlAC'
+VK_APP_ID = '5886008'
+VK_API_SECRET = '5p4GcBJeCED5NCjozcmA'
 
 
-
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/settings/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/settings/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False

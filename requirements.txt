@@ -1,9 +1,33 @@
-click==6.7
-Django==1.10.5
-django-registration-redux==1.4
-gunicorn==19.6.0
-olefile==0.44
-Pillow==4.0.0
-psycopg2==2.6.2
-python-dotenv==0.6.3
-virtualenv==15.1.0
+automium (0.2.6)
+automium-web (0.1.1)
+click (6.7)
+defusedxml (0.5.0)
+dj-config-url (0.1.1)
+dj-database-url (0.4.1)
+Django (1.10.5)
+django-registration-redux (1.4)
+Flask (0.12)
+gunicorn (19.6.0)
+itsdangerous (0.24)
+Jinja2 (2.9.5)
+legacy (0.1.6)
+MarkupSafe (0.23)
+oauthlib (2.0.1)
+olefile (0.44)
+Pillow (4.0.0)
+pip (9.0.1)
+psycopg2 (2.6.2)
+PyJWT (1.4.2)
+python-decouple (3.0)
+python-dotenv (0.6.3)
+python-social-auth (0.2.21)
+python3-openid (3.0.10)
+requests (2.13.0)
+requests-oauthlib (0.8.0)
+setuptools (20.10.1)
+six (1.10.0)
+social-auth-app-django (1.1.0)
+social-auth-core (1.2.0)
+virtualenv (15.1.0)
+Werkzeug (0.11.15)
+whitenoise (3.2.2)

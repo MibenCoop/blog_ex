@@ -19,12 +19,19 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^$',views.index,name="index"),
-    url(r'^accounts/register/$',MyRegistrationView.as_view(),name='registration_register'),
+    #url(r'^accounts/register/$',MyRegistrationView.as_view(),name='registration_register'),
     url(r'^admin/', admin.site.urls),
     url(r'^blog/',include('blog.urls')),
+    url(r'^settings/$', views.settings, name='settings'),
+    url(r'^settings/password/$', views.password, name='password'),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^register_profile/$',views.register_profile,name='register_profile'),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^signup/$', views.signup, name='signup'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^oauth/', include('social.apps.django_app.urls', namespace='social')),  # <--
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
