@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^delete_comment/(?P<id>[0-9]+)/$', views.delete_comment,name='delete_comment'),
     url(r'^like/(?P<id>[0-9]+)/$', views.like,name='like'),
     url(r'^dislike/(?P<id>[0-9]+)/$', views.dislike,name='dislike'),
+    url(r'^favorite/(?P<id>[0-9]+)/$', views.favorite,name='favorite'),
     url(r'^edit_comment/(?P<id>[0-9]+)/$', views.edit_comment,name='edit_comment'),
     url(r'^edit_page/(?P<id>[0-9]+)/$', views.edit_page,name='edit_page'),
    # url(r'^add_comment/(?P<id>[0-9]+)/$', views.add_comment,name='add_comment'),

@@ -34,7 +34,7 @@ class Page(models.Model):
     views = models.IntegerField(default=0)
     likes = models.ManyToManyField(User, related_name='likes',default=0)
     dislikes = models.ManyToManyField(User, related_name='dislikes',default=0)
-    favorite = models.BooleanField(default=False)
+    favorite = models.ManyToManyField(User, related_name='favorite',default=0)
 
     @property
     def total_likes(self):

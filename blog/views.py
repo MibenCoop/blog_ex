@@ -102,6 +102,10 @@ def show_page(request, id):
             dislike = True;like = False
         else:
             like = False; dislike = False
+        if page.favorite.filter(id = user.id).exists():
+            favorite = True
+        else:
+            favorite = False
     else:
         user = None
     comments = Comment.objects.filter(owner=id).order_by('-date_print')
@@ -122,7 +126,8 @@ def show_page(request, id):
 
 
     context_dict = {'comments': comments, 'id': id, 'page': page,
-                    'userprofile': userprofile,'form':form,'like':like,'dislike':dislike}
+                    'userprofile': userprofile,'form':form,'like':like,'dislike':dislike,
+                    'favorite':favorite,}
     return render(request, 'blog/show_page.html', context_dict)
 
 
@@ -223,6 +228,10 @@ def profile(request, username):
         form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
         if form.is_valid():
             form.save(commit=True)
+            comments = Comment.objects.filter(author = username)
+            for comment in comments:
+                comment.avatar = userprofile.picture
+                comment.save()
             return redirect('profile', user.username)
         else:
             print(form.errors)
@@ -342,6 +351,16 @@ def dislike(request,id,):
     return redirect('show_page', id)
 
 
+@login_required
+def favorite(request,id,):
+    user = request.user
+    page = get_object_or_404(Page, id=id)
+    if page.favorite.filter(id=user.id).exists():
+        page.favorite.remove(user)
+        #return redirect('index')
+    else:
+        page.favorite.add(user)
+    return redirect('show_page', id)
 
 
 
