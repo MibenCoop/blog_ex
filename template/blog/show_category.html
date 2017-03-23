@@ -8,12 +8,12 @@
         {% if pages %}
             {% for page in pages %}
                     <strong>Название:</strong> {{ page.title }} - <strong>Автор:</strong> {{ page.author }}<br>
-                                   {{ page.content }}<a href="{% url 'show_page' page.id %}"> Читать далее</a><br>
+                                   {{ page.content }}<a href="{% url 'show_page' page.id %}"> Читать далее</a><b>
             {% endfor %}
         {% else %}
             В этой категории нет заметок<br>
             Но можно быть <strong>первым</strong><br>
-            ККнопка для добавления снизу;)
+            Кнопка для добавления снизу;)
         {% endif %}
     {% else %}
         Нет страниц

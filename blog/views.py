@@ -362,13 +362,20 @@ def favorite(request,id,):
         page.favorite.add(user)
     return redirect('show_page', id)
 
+@login_required
+def action_list(request):
+    name = request.user
+    pages = Page.objects.filter(likes = name ).order_by('-date_print')[:5]
+    favorite_pages = Page.objects.filter(favorite = name).order_by('-date_print')[:5]
+    context_dict = { 'pages':pages ,'favorite_pages':favorite_pages }
+    return render(request,'blog/action_list.html',context_dict)
 
 
 
-
-
-
-
-
-
+@login_required
+def profiles_list(request):
+    me = request.user
+    users  = UserProfile.objects.all()
+    context_dict = {'users':users,'me':me,}
+    return render(request,'blog/profiles_list.html',context_dict)
 

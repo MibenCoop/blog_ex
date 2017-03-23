@@ -32,7 +32,9 @@
         {% else %}
         {% endif %}
         {% if user.is_authenticated %}
-                 <a class="blog-nav-item" href="{% url 'list_notes' %}">Твои заметки</a>
+                 <a class="blog-nav-item" href="{% url 'list_notes' %}">Мои заметки</a>
+                 <a class="blog-nav-item" href="{% url 'action_list' %}">Мои действия</a>
+                 <a class="blog-nav-item" href="{% url 'profiles_list' %}">Пользователи</a>
         {% else %}
         {% endif %}
       <a class="blog-nav-item" href="{%  url 'about' %}">О нас</a>

@@ -1,0 +1,26 @@
+{% extends 'blog/base.html' %}
+{% block title_block %}
+    Мои заметки
+{% endblock %}
+{% block body_block %}
+    <strong>Все пользователи  блога:<strong><br>
+    {% if users%}
+	    {% for user in users %}
+	    	{% if user != me%}
+	    		<div>
+	    			<div class="container"></div>
+		    			<div class="col-sm-2">
+		    					{{ user.username }}
+		    				    <img src="{{MEDIA_URL}}{{user.picture}}"  width="80" height="80"
+	                          alt="{{user.picture}}" title="avatar"/>
+		    			</div>
+		    			<div class="col-sm-7">
+		    				123
+		    			</div>
+		    			<div class="col-sm-2"></div>
+	    		</div>
+	    	{% endif %}
+
+	    {% endfor %}
+    {% endif %}
+{% endblock %}
