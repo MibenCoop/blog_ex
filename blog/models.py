@@ -44,6 +44,14 @@ class Page(models.Model):
         """
         return self.likes.count()
 
+    @property
+    def total_dislikes(self):
+        """
+        Likes for the company
+        :return: Integer: Likes for the company
+        """
+        return self.dislikes.count()
+
     def __str__(self):
         return self.title
 

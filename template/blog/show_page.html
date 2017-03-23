@@ -13,6 +13,7 @@
             <a href="{% url 'like' page.id%}"><i class="fa fa-thumbs-o-up fa-1x "
                                                  aria-hidden="true"></i></a>
         {% endif %}
+        {{ page.total_likes }}
         {% if dislike %}
             <a href="{% url 'dislike' page.id%}"><i class="fa fa-thumbs-down fa-1x"
                                                  aria-hidden="true"></i></a>
@@ -20,6 +21,7 @@
             <a href="{% url 'dislike' page.id%}"><i class="fa fa-thumbs-o-down fa-1x "
                                                  aria-hidden="true"></i></a>
         {% endif %}
+        {{ page.total_dislikes }}
     {% endif %}
     </h1>
     <strong>Автор:</strong> {{ page.author }} <hr>
