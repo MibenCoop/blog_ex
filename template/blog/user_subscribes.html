@@ -1,0 +1,26 @@
+{% extends 'blog/base.html' %}
+{% block title_block %}
+    Мои заметки
+{% endblock %}
+{% block body_block %}
+    <strong>Мои подписки:</strong><br><br>
+    {% if users%}
+	    {% for user in users %}
+	    		<div>
+	    			<div class="container"></div>
+	    			<hr>
+		    			<div class="col-sm-2">
+		    					{{ user.username }}<br>
+		    				    <a href="{% url 'person_profile' user.id %}" alt="{{user.id}}"><img src="{{MEDIA_URL}}{{user.picture}}"  width="80" height="80"
+	                          alt="{{user.picture}}" title="avatar"/></a> 
+		    			</div>
+		    			<div class="col-sm-4">
+		    					<br><br>
+									<a href="{% url 'subscribe' user.id %}" alt="{{user.id}}"><strong>Отписаться
+									</strong></a>
+		    			</div>
+	    		</div>
+	    		<hr>
+	    {% endfor %} <br><br>
+    {% endif %}
+{% endblock %}

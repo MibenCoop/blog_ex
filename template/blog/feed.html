@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+    Feed
+{% endblock %}
+{% block body_block %}
+    Последние новости:<br>
+    {% for new in news %}
+        {{ new.author }} в {{ new.date_print }} добавил статью:<strong>{{ new.title }}</strong>  <br>  
+        
+        {{ new.content}} (<a href="{% url 'show_page' new.id %}">Читать далее</a>)<br>
+
+    {% endfor %}
+{% endblock %}

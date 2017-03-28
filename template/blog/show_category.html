@@ -8,7 +8,7 @@
         {% if pages %}
             {% for page in pages %}
                     <strong>Название:</strong> {{ page.title }} - <strong>Автор:</strong> {{ page.author }}<br>
-                                   {{ page.content }}<a href="{% url 'show_page' page.id %}"> Читать далее</a><b>
+                                   {{ page.content }}(<a href="{% url 'show_page' page.id %}">Читать далее</a>)<br>
             {% endfor %}
         {% else %}
             В этой категории нет заметок<br>

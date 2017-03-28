@@ -10,11 +10,10 @@
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
-            {% for field in form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}<br>
-                {{ field }} <hr>
-            {% endfor %}
+            {{ form.title.help_text }}<br>
+            {{ form.title }}<br>
+            {{ form.content.help_text }}<br>
+            {{ form.content }}<br>
             <button class="btn btn-primary" name="submit" value="submit">Создать страницу</button>
 
         </form>

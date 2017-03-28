@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 
-from blog.models import Category, Page, UserProfile, Comment
+from blog.models import Category, Page, UserProfile, Comment 
 from blog.forms import CategoryForm, PageForm, UserProfileForm, CommentForm
 from datetime import datetime
 
@@ -88,7 +88,7 @@ def show_page(request, id):
         username = request.user.username
         userprofile = UserProfile()
         if (username):
-             userprofile = UserProfile.objects.get_or_create(user=request.user)[0]
+             userprofile = UserProfile.objects.get_or_create(id=request.user.id)[0]
     except:
         username = None
         userprofile = None
@@ -149,12 +149,25 @@ def add_category(request):
         form = CategoryForm(request.POST)
         if form.is_valid():
             category = form.save(commit=True)
-            print(category, category.slug)
             return show_category(request, category.slug)
         else:
             print(form.errors)
 
     return render(request, 'blog/add_category.html', {'form': form})
+
+
+def add_to_feed(request,page):
+    user = UserProfile.objects.get(id = request.user.id)
+    page = Page.objects.get(title = page.title,author = page.author,date_print=page.date_print)
+    subscribers_u = user.subscribers.all()
+    subscribers = []
+    for subscriber in subscribers_u:
+        subscriber = UserProfile.objects.get(id = subscriber.id)
+        subscribers.append(subscriber)
+    for subscriber in subscribers:
+        subscriber.feed.add(page)
+    pass
+
 
 
 def add_page(request, category_name_slug):
@@ -171,11 +184,15 @@ def add_page(request, category_name_slug):
             page.author = request.user
             page.save()
             #print(page)
+            add_to_feed(request,page)
             return show_category(request, category_name_slug)
         else:
             print(form.errors)
+
     context_dict = {'form': form, 'category': category}
     return render(request, 'blog/add_page.html', context_dict)
+
+
 
 
 @login_required
@@ -193,14 +210,13 @@ def user_logout(request):
 @login_required
 def register_profile(request):
     form = UserProfileForm()
-
     if request.method == "POST":
         form = UserProfileForm(request.POST, request.FILES)
         if form.is_valid():
-            user_profile = form.save(commit=False)
-            user_profile.user = request.user
-
-            user_profile.save()
+            userprofile = form.save(commit=False)
+            userprofile.username = request.user
+            userprofile.id = request.user.id
+            userprofile.save()
             return redirect('index')
         else:
             print(form.errors)
@@ -216,33 +232,23 @@ class MyRegistrationView(RegistrationView):
         return reverse('register_profile')
 
 @login_required
-def profile(request, username):
-    try:
-        user = User.objects.get(username=username)
-    except User.DoesNotExist:
-        return redirect('index')
-    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+def profile(request, id):
+    userprofile = UserProfile.objects.get(id = id)
     form = UserProfileForm({'picture': userprofile.picture,'gender': userprofile.gender})
-
     if request.method == "POST":
         form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
         if form.is_valid():
             form.save(commit=True)
-            comments = Comment.objects.filter(author = username)
+            comments = Comment.objects.filter(author = userprofile.username)
             for comment in comments:
                 comment.avatar = userprofile.picture
                 comment.save()
-            return redirect('profile', user.username)
+            return redirect('profile', userprofile.id)
         else:
             print(form.errors)
     context_dict = {'form': form, }
 
-    return render(request, 'blog/profile.html', {'userprofile': userprofile, 'selecteduser': user, 'form': form})
-
-def test_cookies(request):
-    message = request.user
-    context_dir = {'message':message,}
-    return render(request,'blog/testcookies.html',context_dir)
+    return render(request, 'blog/profile.html', {'userprofile': userprofile,'form': form})
 
 def delete_page(request,id):
     try:
@@ -310,20 +316,10 @@ def edit_comment(request,id):
             return redirect('show_page', page_id)
         else:
             print(form.errors)
-    context_dict = {'form': form, }
-    return render(request, 'blog/edit_comment.html', {'form': form,'id':id})
+    context_dict = {'form': form,'id':id }
+    return render(request, 'blog/edit_comment.html', context_dict)
 
 
-
-
-def track_url(request,id):
-    try:
-        page = Page.objects.get(id=id)
-        page.views = page.views + 1
-        page.save()
-        return redirect('show_page', id)
-    except:
-        return HttpResponse("Page id {0} not found".format(id))
 
 
 @login_required
@@ -357,25 +353,103 @@ def favorite(request,id,):
     page = get_object_or_404(Page, id=id)
     if page.favorite.filter(id=user.id).exists():
         page.favorite.remove(user)
-        #return redirect('index')
     else:
         page.favorite.add(user)
     return redirect('show_page', id)
 
+
 @login_required
 def action_list(request):
-    name = request.user
-    pages = Page.objects.filter(likes = name ).order_by('-date_print')[:5]
-    favorite_pages = Page.objects.filter(favorite = name).order_by('-date_print')[:5]
+    pages = Page.objects.filter(likes = request.user ).order_by('-date_print')[:5]
+    favorite_pages = Page.objects.filter(favorite = request.user).order_by('-date_print')[:5]
     context_dict = { 'pages':pages ,'favorite_pages':favorite_pages }
     return render(request,'blog/action_list.html',context_dict)
 
-
+def subscribe_status(request,userprofile):
+    if userprofile.subscribers.filter(id = request.user.id).exists():
+        subscribe = True
+    else:
+        subscribe = False
+    return subscribe
 
 @login_required
 def profiles_list(request):
-    me = request.user
     users  = UserProfile.objects.all()
+    most_popular = []
+    subscribes = []
+    for user in users:
+        print(user.username)
+        if user.total_pages > 0:
+            pages = Page.objects.filter(author = user.username).order_by("-likes")[:1]
+            for page in pages:
+                most_popular.append(page)
+        else:
+            most_popular.append(0)
+
+        if user.subscribers.filter(id=request.user.id).exists():
+            subscribes.append(1)
+        else:
+            subscribes.append(0)
+    users = zip(users,most_popular,subscribes)
+    me = request.user
     context_dict = {'users':users,'me':me,}
     return render(request,'blog/profiles_list.html',context_dict)
 
+
+
+@login_required
+def person_profile(request,id):
+    try:
+        userprofile = UserProfile.objects.get(id=id)
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    subscribe = subscribe_status(request,userprofile)
+    pages = userprofile.pages.order_by("-likes")[:3]
+    form = UserProfileForm({'picture': userprofile.picture,'gender': userprofile.gender})
+    context_dict = {'form': form,'userprofile':userprofile,'pages':pages,'subscribe':subscribe }
+    return render(request,'blog/person_profile.html',context_dict)
+
+@login_required
+def person_pages(request,id):
+    try:
+        userprofile = UserProfile.objects.get(id=id)
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+    pages = userprofile.pages.order_by("-date_print")
+    context_dict = {'userprofile':userprofile,'pages':pages, }
+    return render(request,'blog/person_pages.html',context_dict)
+
+@login_required
+def subscribe(request,id):
+    userP = get_object_or_404(UserProfile, id = request.user.id)
+    personP = get_object_or_404(UserProfile, id=id)
+    person = get_object_or_404(User, id = id)
+
+    if personP.subscribers.filter(id=request.user.id).exists():
+        personP.subscribers.remove(request.user)
+        userP.authors.remove(person)
+    else:
+        personP.subscribers.add(request.user)
+        userP.authors.add(person)
+    return redirect('person_profile', id)
+
+
+@login_required
+def user_subscribes(request,id):
+    usersprofiles = UserProfile.objects.get(id = id)
+    persons = usersprofiles.authors.all()
+    users = []
+    for person in persons:
+        user = UserProfile.objects.get(id = person.id)
+        users.append(user)
+    context_dict = {'users':users,}
+    return render(request,'blog/user_subscribes.html',context_dict)
+
+
+@login_required
+def feed(request):
+    userprofile = UserProfile.objects.get(id = request.user.id)
+    news = userprofile.feed.all()
+    context_dict = {'news':news,}
+    return render(request,'blog/feed.html',context_dict)

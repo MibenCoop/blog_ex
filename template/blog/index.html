@@ -15,14 +15,12 @@
                                     <strong>Название:</strong> {{ page.title }} -
                                         <strong>Автор:</strong> {{ page.author }}<br>
                                             <p id="wrap_text" >{{  page.content }}
-                                                (<a href="{% url 'goto' page.id %}">Читать далее</a>)</p>
+                                                (<a href="{% url 'show_page' page.id %}">Читать далее</a>)</p>
                             {% endif %}
                         {% endfor %} <hr>
                 {% endif %}
                 </ul>
             {% endfor %}
-        {% else %}
-            Что-то не так
         {% endif %}
     </div><!-- /.blog-post -->
   <ul class="pager">

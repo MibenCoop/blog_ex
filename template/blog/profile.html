@@ -1,32 +1,29 @@
 {% extends 'blog/base.html' %}
 {% load staticfiles %}
 {% block title_block %}
-    {{ selecteduser.username }}
+    {{ userprofile.username }}
 {% endblock %}
 {% block body_block %}
-<h1>{{selecteduser.username}}</h1>
+<h1>{{userprofile.username}}</h1>
    {% if userprofile.picture %}
         <img src="{{MEDIA_URL}}{{userprofile.picture }}"  width="200" height="200"
-             alt="{{selecteduser.username}}" title="avatar"/>
+             alt="{{userprofile.username}}" title="avatar"/>
    {% else %}
             {% if userprofile.gender == "M" %}
                  <img width="200" height="200" src="{% static 'images/male.jpg' %}"
-    alt="{{selecteduser.username}}" title="avatar"/>
+    alt="{{userprofile.username}}" title="avatar"/>
             {% else %}
                 <img width="200" height="200" src="{% static 'images/female.jpg' %}"
-    alt="{{selecteduser.username}}" title="avatar"/>
+    alt="{{userprofile.username}}" title="avatar"/>
             {% endif %}
    {% endif %}<br>
     <div>
-    {% if selecteduser.username == user.username %}<br><br>
+    {% if userprofile.username == userprofile.username %}<br><br>
         <form method="post" action="." enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}<br><br>
+        {{ form.as_p }}
          <input type="submit" value="Update" />
         </form>
-    {% else %}
-        <p><strong>Website:</strong>
-         <a href="{{userprofile.website}}">{{userprofile.website}}</a></p>
     {% endif %}
     </div>
 <div id="edit_profile"></div>

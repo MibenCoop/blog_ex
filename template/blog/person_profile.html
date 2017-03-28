@@ -1,0 +1,49 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+    {{ userprofile.username }}
+{% endblock %}
+{% block body_block %}
+<h1>{{userprofile.username}}</h1>
+   {% if userprofile.picture %}
+        <img src="{{MEDIA_URL}}{{userprofile.picture }}"  width="200" height="200"
+             alt="{{userprofile.username}}" title="avatar"/> <br><br>
+             {% if userprofile.gender == "M" %}
+                Male
+             {% else %}
+                Female
+             {% endif %}
+   {% else %}
+            {% if userprofile.gender == "M" %}
+                <img width="200" height="200" src="{% static 'images/male.jpg' %}"
+    alt="{{userprofile.username}}" title="avatar"/> <br><br> Male
+               
+            {% else %}
+                <img width="200" height="200" src="{% static 'images/female.jpg' %}"
+    alt="{{userprofile.username}}" title="avatar"/> <br><br> Female
+            {% endif %}
+    {% endif %}
+    <br><br>
+    Написанных статей: 
+    {% if userprofile.total_pages > 0%}
+        {{ userprofile.total_pages }} <br><br>
+        3 самых популярных статьи:<br><br>
+    {% for page in pages %}
+        Лайков:{{page.total_likes}}<br>
+        <p id="wrap_text" >{{  page.content }}
+            (<a href="{% url 'show_page' page.id %}">Читать далее</a>)</p><br><br>
+    {% endfor %}     
+    {% else %}
+        Нет <br><br>
+    {% endif %}
+    {% if userprofile.total_pages > 0%}
+        <a href="{% url 'person_pages' userprofile.id %}">Посмотреть все статьи этого автора</a><br>
+    {% endif %}
+    <hr><hr><hr>
+    {% if subscribe %}
+        <a href="{% url 'subscribe' userprofile.id %}" alt="{{userprofile.id}}"><strong>Отписаться<strong></a>
+    {% else %}
+        <a href="{% url 'subscribe' userprofile.id %}" alt="{{userprofile.id}}"><strong>Подписаться<strong></a>
+    {% endif %}
+<div id="edit_profile"></div>
+{% endblock %}

@@ -52,19 +52,28 @@ class Page(models.Model):
         """
         return self.dislikes.count()
 
-    def __str__(self):
-        return self.title
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    username = models.OneToOneField(User)
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
     )
+    feed = models.ManyToManyField(Page,related_name='feed',default=0)
+    authors = models.ManyToManyField(User,related_name='author',default=0)
+    subscribers = models.ManyToManyField(User,related_name='subscriber',default=0)
+    pages = models.ManyToManyField(Page,related_name='pages',default=0)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True)
-    #sex = models.Field
     picture = models.ImageField(upload_to='profile_images',
                                 blank=True,default = 'avatar.jpg',)
+    @property
+    def total_pages(self):
+        """
+        Likes for the company
+        :return: Integer: Likes for the company
+        """
+        return self.pages.count()
+
 class Comment(models.Model):
     owner = models.IntegerField(default=0)
     avatar = models.ImageField(blank=True)

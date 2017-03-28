@@ -1,0 +1,19 @@
+{% extends 'blog/base.html' %}
+{% load staticfiles %}
+{% block title_block %}
+    {{ userprofile.username }}
+{% endblock %}
+{% block body_block %}
+	Статьи {{ userprofile.username}} <br>
+    Написанных статей: 
+    {% if userprofile.total_pages > 0%}
+        {{ userprofile.total_pages }} <br><br>
+	    {% for page in pages %}
+	        Лайков:{{page.total_likes}}<br>
+	        <p id="wrap_text" >{{  page.content }}
+	            (<a href="{% url 'show_page' page.id %}">Читать далее</a>)</p>
+	    {% endfor %}     
+    {% else %}
+        Нет <br><br>
+    {% endif %}
+{% endblock %}
