@@ -2,12 +2,11 @@
 {% block body_block %}
 
 <h2 class="form-signin-heading">Регистрация</h2>
-
 <form role="form" method="post" action=".">
     {% csrf_token %}
     <div class="form-group" >
-    <p class="required"><label class="required" for="id_username">
-        Имя: </label>
+    <p  class="required"><label class="required" for="id_username">
+        Имя: </label> <p id = "username_error" hidden >Данное имя уже занято</p>
         <input class="form-control" id="id_username" maxlength="30"
         name="username" type="text" />
         <span class="helptext">
@@ -36,4 +35,27 @@
     </div>
     <button type="submit" class="btn btn-default">Отправить</button>
 </form>
+
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script>
+    $("#id_username").change(function () {
+      $("#username_error").hide().css("color","red");
+      var username = $(this).val();
+      $.ajax({
+        url: '{% url 'validate_username' %}' ,
+        data: {
+          'username': username
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            $("#username_error").show().css("color","red");
+
+          }
+        }
+      });
+
+    });
+  </script>
 {% endblock %}

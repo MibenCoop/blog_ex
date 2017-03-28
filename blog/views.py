@@ -7,7 +7,6 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
-
 from blog.models import Category, Page, UserProfile, Comment 
 from blog.forms import CategoryForm, PageForm, UserProfileForm, CommentForm
 from datetime import datetime
@@ -18,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout
-
+import re
 
 
 def index(request):
@@ -453,3 +452,34 @@ def feed(request):
     news = userprofile.feed.all()
     context_dict = {'news':news,}
     return render(request,'blog/feed.html',context_dict)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def validate_username(request):
+    username = request.GET.get('username', None)
+    result = re.findall(r'[a,A][d,D][m,M][i,I][n,N]',username)
+    if result:
+        data = {
+            'is_taken': True
+        }
+    else:
+        data = {
+            'is_taken': User.objects.filter(username = username).exists()
+        }
+
+    print(data['is_taken'])
+    if data['is_taken']:
+        data['error_message'] = 'A user with this username already exists.'
+    return JsonResponse(data)
